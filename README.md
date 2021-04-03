@@ -1,4 +1,8 @@
 
+### Screenshot
+
+![screenshot](https://raw.githubusercontent.com/karino2/MdMinaosi/main/misc/screenshot_md_minaosi.png)
+
 ### How to build
 
 ```
