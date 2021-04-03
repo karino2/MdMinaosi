@@ -65,14 +65,27 @@ window.addEventListener('DOMContentLoaded', () => {
     editArea.rows = Math.max((end-start), 3);
     editDiv.style.display = 'block'
   })
+
   document.getElementById('cancel-edit').addEventListener('click', ()=>{
     editDiv.style.display = 'none'
   })
 
-  document.getElementById('submit-edit').addEventListener('click', ()=>{
+  const submitEdit = ()=> {
     ipcRenderer.send('submit', editArea.value, targetRange)
     editDiv.style.display = 'none'
+  }
+
+  document.getElementById('submit-edit').addEventListener('click', ()=>{
+    submitEdit()
   })
+
+  editArea.addEventListener('keydown', (event)=>{
+    if((event.keyCode == 10 || event.keyCode == 13)
+        && (event.ctrlKey || event.metaKey)) {
+        submitEdit()        
+    }
+  })
+
 
   document.addEventListener('dragover', (event)=> {
     event.preventDefault();

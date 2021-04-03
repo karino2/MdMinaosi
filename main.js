@@ -1,4 +1,4 @@
-const { ipcMain, dialog, app, BrowserWindow, screen } = require('electron')
+const { ipcMain, dialog, app, BrowserWindow, screen, globalShortcut } = require('electron')
 const path = require('path')
 const { Remarkable } = require('remarkable')
 const remark = new Remarkable()
@@ -53,6 +53,10 @@ remark.renderer.rules.ordered_list_open = (tokens, idx) => {
     return '<ol>'
 }
 
+const reloadFile = (target) => {
+    if (g_currentPath != "")
+        openPath(g_currentPath, target)
+}
 
 function createWindow () {
     const { width, height } = screen.getPrimaryDisplay().workAreaSize
@@ -74,6 +78,12 @@ app.whenReady().then(() => {
         if (BrowserWindow.getAllWindows().length === 0) {
         createWindow()
         }
+    })
+
+    globalShortcut.register("CommandOrControl+R", ()=>{
+        let cur = BrowserWindow.getFocusedWindow()
+        if (cur != null)
+            reloadFile(cur)
     })
 })
 
@@ -115,8 +125,7 @@ ipcMain.on('open-file-dialog', async (event)=>{
 })
 
 ipcMain.on('reload-file', async (event)=>{
-    if (g_currentPath != "")
-        openPath(g_currentPath, event.sender)
+    reloadFile(event.sender)
 })
 
 
