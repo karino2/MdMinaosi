@@ -6,7 +6,8 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "install": "cp -r out/md-minaosi-darwin-x64/md-minaosi.app /Applications"
   },
   "keywords": [],
   "author": "karino2",
