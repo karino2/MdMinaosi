@@ -56,7 +56,7 @@ window.addEventListener('DOMContentLoaded', () => {
   body.addEventListener('click', onBodyClick)
 
   const editDiv = document.getElementById("edit-div")
-  const editArea = editDiv.querySelector(".edit-area")
+  const editArea = editDiv.querySelector("#edit-area")
 
   ipcRenderer.on('start-edit', (event, html, [start, end]) => {
     targetRange = [start, end]
