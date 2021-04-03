@@ -114,6 +114,12 @@ ipcMain.on('open-file-dialog', async (event)=>{
     }
 })
 
+ipcMain.on('reload-file', async (event)=>{
+    if (g_currentPath != "")
+        openPath(g_currentPath, event.sender)
+})
+
+
 ipcMain.on('line-click', async (event, line)=>{
     let target = []
     let [start, end] = g_lineMap[line]
