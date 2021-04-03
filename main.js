@@ -9,48 +9,37 @@ let g_srcLines = [];
 let g_currentPath = '';
 
 // store line number
-remark.renderer.rules.paragraph_open = (tokens, idx) => {
+const add_src_line_open = (tagname, tokens, idx) => {
     let line;
     if (tokens[idx].lines && tokens[idx].level == 0)
     {
         line = tokens[idx].lines[0]
         g_lineMap[line] = tokens[idx].lines
-        return `<p src-line="${line}">`
+        return `<${tagname} src-line="${line}">`
     }
-    return '<p>'
+    return `<${tagname}>`
+
+}
+
+remark.renderer.rules.paragraph_open = (tokens, idx) => {
+    return add_src_line_open('p', tokens, idx)
 }
 
 remark.renderer.rules.heading_open = (tokens, idx) => {
-    let line;
-    if (tokens[idx].lines && tokens[idx].level == 0)
-    {
-        line = tokens[idx].lines[0]
-        g_lineMap[line] = tokens[idx].lines
-        return `<h${tokens[idx].hLevel} src-line="${line}">`
-    }
-    return `<h${tokens[idx].hLevel}>`
+    let tagname = `h${tokens[idx].hLevel}`
+    return add_src_line_open(tagname, tokens, idx)
 }
 
 remark.renderer.rules.bullet_list_open = (tokens, idx) => {
-    let line;
-    if (tokens[idx].lines && tokens[idx].level == 0)
-    {
-        line = tokens[idx].lines[0]
-        g_lineMap[line] = tokens[idx].lines
-        return `<ul src-line="${line}">`
-    }
-    return '<ul>'
+    return add_src_line_open('ul', tokens, idx)
 }
 
 remark.renderer.rules.ordered_list_open = (tokens, idx) => {
-    let line;
-    if (tokens[idx].lines && tokens[idx].level == 0)
-    {
-        line = tokens[idx].lines[0]
-        g_lineMap[line] = tokens[idx].lines
-        return `<ol src-line="${line}">`
-    }
-    return '<ol>'
+    return add_src_line_open('ol', tokens, idx)
+}
+
+remark.renderer.rules.blockquote_open = (tokens, idx) => {
+    return add_src_line_open('blockquote', tokens, idx)
 }
 
 const reloadFile = (target) => {
@@ -108,7 +97,7 @@ const openPath = async (filePath, sender) => {
 
 ipcMain.on('setup-done', async (event)=> {
     /*
-    openPath( "/Users/arinokazuma/work/GitHub/karino2.github.io/_posts/2021-04-02-MDMinaosi.md",
+    openPath( "/Users/arinokazuma/Google\ ドライブ/DriveText/wiki_and_informal.md",
      event.sender )
      */
 })
