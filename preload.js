@@ -48,7 +48,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  document.getElementById("body").addEventListener('click', onBodyClick)
+  const body = document.getElementById("body")
+  body.addEventListener('click', onBodyClick)
 
   const editDiv = document.getElementById("edit-div")
   const editArea = editDiv.querySelector(".edit-area")
@@ -67,6 +68,17 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('submit-edit').addEventListener('click', ()=>{
     ipcRenderer.send('submit', editArea.value, targetRange)
     editDiv.style.display = 'none'
+  })
+
+  document.addEventListener('dragover', (event)=> {
+    event.preventDefault();
+  })
+
+  document.addEventListener('drop', (event)=> {
+    event.preventDefault();
+    event.stopPropagation();
+  
+    ipcRenderer.send('open-file', event.dataTransfer.files[0].path)
   })
 
   ipcRenderer.send("setup-done")

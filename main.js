@@ -137,3 +137,7 @@ ipcMain.on('submit', async (event, text, [start, end])=>{
     await fs.writeFile(g_currentPath, src)
     updateMd(src, event.sender)
 })
+
+ipcMain.on('open-file', async (event, file)=> {
+    openPath( file, event.sender )
+})
