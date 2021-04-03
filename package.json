@@ -1,6 +1,6 @@
 {
   "name": "md-minaosi",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Markdown review app.",
   "main": "main.js",
   "scripts": {
