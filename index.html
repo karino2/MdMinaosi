@@ -4,8 +4,21 @@
     <meta charset="UTF-8">
     <title>Md Minaosi</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <style>
+        .edit-area
+        {
+            width: 100%
+        }
+    </style>
 </head>
-<body style="background: white;">
+<body id="body" style="background: white;">
+    <div id="edit-div" style="display:none;">
+        <textarea class="edit-area"></textarea>
+        <div>
+            <button id="cancel-edit">Cancel</button>
+            <button id="submit-edit">Submit</button>
+        </div>
+    </div>
     <button id="open-file">Open File</button>
     <div id="md-div">
 
