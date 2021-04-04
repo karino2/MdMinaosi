@@ -1,4 +1,4 @@
-const { ipcMain, dialog, app, BrowserWindow, screen, globalShortcut } = require('electron')
+const { ipcMain, dialog, app, BrowserWindow, screen, globalShortcut, Menu } = require('electron')
 const path = require('path')
 const { Remarkable } = require('remarkable')
 const remark = new Remarkable()
@@ -68,12 +68,6 @@ app.whenReady().then(() => {
         createWindow()
         }
     })
-
-    globalShortcut.register("CommandOrControl+R", ()=>{
-        let cur = BrowserWindow.getFocusedWindow()
-        if (cur != null)
-            reloadFile(cur)
-    })
 })
 
 app.on('window-all-closed', () => {
@@ -102,21 +96,17 @@ ipcMain.on('setup-done', async (event)=> {
      */
 })
 
-ipcMain.on('open-file-dialog', async (event)=>{
+const openFileDialog = async (targetWin) => {
     const {canceled, filePaths} = await dialog.showOpenDialog({
         properties: ['openFile', 'openDirectory'],
         filters: [{ name: 'Markdown', extensions: ['md'] }]
     })
     if(!canceled) {
         console.log(filePaths[0])
-        openPath( filePaths[0], event.sender )
+        openPath( filePaths[0], targetWin )
     }
-})
 
-ipcMain.on('reload-file', async (event)=>{
-    reloadFile(event.sender)
-})
-
+}
 
 ipcMain.on('line-click', async (event, line)=>{
     let target = []
@@ -145,3 +135,61 @@ ipcMain.on('submit', async (event, text, [start, end])=>{
 ipcMain.on('open-file', async (event, file)=> {
     openPath( file, event.sender )
 })
+
+const isMac = process.platform === 'darwin'
+
+const template = [
+  ...(isMac ? [{ role: 'appMenu'}] : []),
+  {
+    label: 'File',
+    submenu: [
+        {
+            label: "Open",
+            accelerator: 'CmdOrCtrl+O',
+            click: async (item, focusedWindow)=> {
+                openFileDialog(focusedWindow)
+            }
+          },
+        isMac ? { role: 'close' } : { role: 'quit' }
+    ]
+  },
+  {
+    label: 'View',
+    submenu: [
+      {
+          label: 'Reload',
+          accelerator: 'CmdOrCtrl+R',
+          click: (item, focusedWindow)=> {
+              reloadFile( focusedWindow )
+          }
+      },
+      { type: 'separator' },
+      { role: 'togglefullscreen' }
+    ]
+  },
+  { role: 'windowMenu' },
+  {
+    label: 'Developer',
+    submenu: [
+        { role: 'toggleDevTools' }
+    ]
+  },
+  /*
+  ,
+  {
+    role: 'help',
+    submenu: [
+      {
+        label: 'Learn More',
+        click: async () => {
+          const { shell } = require('electron')
+          await shell.openExternal('https://electronjs.org')
+        }
+      }
+    ]
+  }
+  */
+]
+
+const menu = Menu.buildFromTemplate(template)
+Menu.setApplicationMenu(menu)

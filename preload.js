@@ -3,14 +3,6 @@ const {ipcRenderer} = require('electron')
 
 window.addEventListener('DOMContentLoaded', () => {
 
-  document.getElementById('open-file').addEventListener('click', (event)=>{
-      ipcRenderer.send('open-file-dialog')
-  })
-
-  document.getElementById('reload-file').addEventListener('click', (event)=>{
-    ipcRenderer.send('reload-file')
-  })
-
   const mdDiv = document.getElementById('md-div')
 
   ipcRenderer.on('update-md', (event, html) => {
