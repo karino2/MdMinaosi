@@ -7,7 +7,8 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "install": "cp -r out/md-minaosi-darwin-x64/md-minaosi.app /Applications"
+    "icon-make": "./node_modules/.bin/electron-icon-builder --input=./misc/icon_original.png --output=./misc",
+    "deploy": "cp -r out/MDMinaosi-darwin-x64/MDMinaosi.app /Applications"
   },
   "keywords": [],
   "author": "karino2",
@@ -18,7 +19,8 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
-    "electron": "^12.0.2"
+    "electron": "^12.0.2",
+    "electron-icon-builder": "^2.0.1"
   },
   "dependencies": {
     "bulma": "^0.9.2",
@@ -27,7 +29,10 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "name": "MDMinaosi",
+        "icon": "misc/icons/mac/icon.icns"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
