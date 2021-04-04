@@ -60,15 +60,6 @@ function createWindow () {
     win.loadFile('index.html')
 }
 
-app.whenReady().then(() => {
-    createWindow()
-
-    app.on('activate', () => {
-        if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow()
-        }
-    })
-})
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
@@ -82,6 +73,7 @@ const updateMd = (src, sender) => {
 }
 
 const openPath = async (filePath, sender) => {
+    app.addRecentDocument(filePath)
     g_currentPath = filePath
     const cont = await fs.readFile( filePath )
     const src = cont.toString()
@@ -135,6 +127,16 @@ ipcMain.on('open-file', async (event, file)=> {
     openPath( file, event.sender )
 })
 
+app.on('open-file', (event, path)=> {
+    if(path.endsWith(".md")) {
+        event.preventDefault()
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow()
+        }
+        openPath(path, BrowserWindow.getFocusedWindow())
+    }
+})
+
 const isMac = process.platform === 'darwin'
 
 const template = [
@@ -148,7 +150,17 @@ const template = [
             click: async (item, focusedWindow)=> {
                 openFileDialog(focusedWindow)
             }
-          },
+        },
+        {
+            label: "Open Recent",
+            role: "recentDocuments",
+            submenu: [
+                {
+                    label: "Clear Recent",
+                    role: "clearRecentDocuments"
+                }
+            ]
+        },
         isMac ? { role: 'close' } : { role: 'quit' }
     ]
   },
@@ -190,5 +202,16 @@ const template = [
   */
 ]
 
-const menu = Menu.buildFromTemplate(template)
-Menu.setApplicationMenu(menu)
+app.whenReady().then(() => {
+    const menu = Menu.buildFromTemplate(template)
+    Menu.setApplicationMenu(menu)
+
+    createWindow()
+
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow()
+        }
+    })
+})
+
