@@ -175,6 +175,7 @@ const template = [
         isMac ? { role: 'close' } : { role: 'quit' }
     ]
   },
+  { role: 'editMenu' },
   {
     label: 'View',
     submenu: [
