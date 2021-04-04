@@ -102,7 +102,6 @@ const openFileDialog = async (targetWin) => {
         filters: [{ name: 'Markdown', extensions: ['md'] }]
     })
     if(!canceled) {
-        console.log(filePaths[0])
         openPath( filePaths[0], targetWin )
     }
 
