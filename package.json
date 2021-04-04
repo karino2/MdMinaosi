@@ -31,7 +31,16 @@
     "forge": {
       "packagerConfig": {
         "name": "MDMinaosi",
-        "icon": "misc/icons/mac/icon.icns"
+        "icon": "misc/icons/mac/icon.icns",
+        "extendInfo": {
+          "CFBundleDocumentTypes": [
+            {
+              "CFBundleTypeExtensions": ["md"],
+              "CFBundleTypeIconFile": "",
+              "LSHandlerRank": "Alternate"
+            }
+          ]          
+        }
       },
       "makers": [
         {

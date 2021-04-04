@@ -127,13 +127,24 @@ ipcMain.on('open-file', async (event, file)=> {
     openPath( file, event.sender )
 })
 
+const g_pendingFile = []
+
+const handleOpenFile = (path) => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow()
+    }
+    openPath(path, BrowserWindow.getFocusedWindow())
+}
+
 app.on('open-file', (event, path)=> {
     if(path.endsWith(".md")) {
         event.preventDefault()
-        if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow()
+        if (!app.isReady())
+        {
+            g_pendingFile.push(path)
+            return
         }
-        openPath(path, BrowserWindow.getFocusedWindow())
+        handleOpenFile(path)
     }
 })
 
@@ -208,9 +219,15 @@ app.whenReady().then(() => {
 
     createWindow()
 
+    if (g_pendingFile.length != 0)
+    {
+        handleOpenFile(g_pendingFile[0])
+        g_pendingFile.clear()
+    }
+
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow()
+            createWindow()
         }
     })
 })
