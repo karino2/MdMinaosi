@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
   let targetRange = [0, 0]
 
   const onBodyClick = (event) => {
-    const findTaretTopElem = (start) => {
+    const findTargetTopElem = (start) => {
       if (start.tagName == "body")
         return null
       if (start == mdDiv)
@@ -33,7 +33,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
       return prev
     }
-    let topelem = findTaretTopElem(event.target) 
+    let topelem = findTargetTopElem(event.target) 
     if (!topelem)
       return
     const sline = topelem.getAttribute('src-line')
