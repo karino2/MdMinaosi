@@ -133,7 +133,10 @@ const handleOpenFile = (path) => {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow()
     }
-    openPath(path, BrowserWindow.getFocusedWindow())
+    let target = BrowserWindow.getFocusedWindow()
+    if (target == null)
+        target = BrowserWindow.getAllWindows()[0]
+    openPath(path, target)
 }
 
 app.on('open-file', (event, path)=> {
@@ -223,7 +226,7 @@ app.whenReady().then(() => {
     if (g_pendingFile.length != 0)
     {
         handleOpenFile(g_pendingFile[0])
-        g_pendingFile.clear()
+        g_pendingFile.length = 0
     }
 
     app.on('activate', () => {
